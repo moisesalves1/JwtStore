@@ -7,7 +7,7 @@ namespace JwtStore.Core.AccountContext.ValueObjects
 {
     public partial class Email : ValueObject
     {
-
+        protected Email() { }
         public Email(string address)
         {
             InvalidEmailException.ThrowIfNull(address);
