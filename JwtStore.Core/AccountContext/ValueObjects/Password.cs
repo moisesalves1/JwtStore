@@ -1,4 +1,5 @@
 ﻿using JwtStore.Core.SharedContext.ValueObjects;
+using System.Security.Cryptography;
 
 namespace JwtStore.Core.AccountContext.ValueObjects
 {
@@ -27,6 +28,30 @@ namespace JwtStore.Core.AccountContext.ValueObjects
             }
 
             return new string(res);
+        }
+
+        private static string Hashing(
+            string password,
+            short saltSize = 16,
+            short keySize = 32,
+            int iterations = 10000,
+            char splitChar = '.')
+        {
+            if (string.IsNullOrEmpty(password))
+                throw new Exception("A senha não deve ser nula ou vazia");
+
+            password += Configuration.Secrets.PasswordSaltKey;
+
+            using var algorithm = new Rfc2898DeriveBytes(
+                password, 
+                saltSize, 
+                iterations, 
+                HashAlgorithmName.SHA256);
+            var key = Convert.ToBase64String(algorithm.GetBytes(keySize));
+            var salt = Convert.ToBase64String(algorithm.Salt);
+
+            return $"{iterations}{splitChar}{salt}{splitChar}{key}";
+
         }
     }
 }
