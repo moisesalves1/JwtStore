@@ -18,8 +18,18 @@ namespace JwtStore.Core.AccountContext.ValueObjects
 
         }
 
+        public void ResendVerification()
+            => Verification = new Verification();
+
+        #region Parameters
         public string Address { get; }
         public string Hash => Address.ToBase64();
+
+        public Verification Verification { get; private set; } = new();
+
+        #endregion
+
+        #region Operators
 
         public static implicit operator string(Email email)
             => email.ToString();
@@ -29,7 +39,8 @@ namespace JwtStore.Core.AccountContext.ValueObjects
 
         public override string ToString()
             => Address;
+        #endregion
 
-        
+
     }
 }
