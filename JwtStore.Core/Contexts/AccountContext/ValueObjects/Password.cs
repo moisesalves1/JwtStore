@@ -1,4 +1,4 @@
-﻿using JwtStore.Core.SharedContext.ValueObjects;
+﻿using JwtStore.Core.Contexts.SharedContext.ValueObjects;
 using System.Security.Cryptography;
 
 namespace JwtStore.Core.AccountContext.ValueObjects

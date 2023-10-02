@@ -1,6 +1,6 @@
 ﻿using JwtStore.Core.AccountContext.ValueObjects;
 using JwtStore.Core.AccountContext.ValueObjects.Exceptions;
-using JwtStore.Core.SharedContext.Entities;
+using JwtStore.Core.Contexts.SharedContext.Entities;
 
 namespace JwtStore.Core.AccountContext.Entities
 {
