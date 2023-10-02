@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace JwtStore.Infra.AccountContext.Mappings
+namespace JwtStore.Infra.Contexts.AccountContext.Mappings
 {
     public class UserMap : IEntityTypeConfiguration<User>
     {
@@ -11,7 +11,7 @@ namespace JwtStore.Infra.AccountContext.Mappings
             builder.ToTable("User");
 
             builder.HasKey(x => x.Id);
-            builder.Property(x=> x.Name)
+            builder.Property(x => x.Name)
                 .HasColumnName("Name")
                 .HasColumnName("NVARCHAR")
                 .HasMaxLength(120)
