@@ -1,4 +1,6 @@
-﻿using JwtStore.Core.Contexts.AccountContext.UseCases.Create.Contracts;
+﻿using JwtStore.Core.AccountContext.Entities;
+using JwtStore.Core.AccountContext.ValueObjects;
+using JwtStore.Core.Contexts.AccountContext.UseCases.Create.Contracts;
 
 namespace JwtStore.Core.Contexts.AccountContext.UseCases.Create
 {
@@ -30,7 +32,24 @@ namespace JwtStore.Core.Contexts.AccountContext.UseCases.Create
 
             #endregion
 
-            // 02 - Gerar os objetos
+            #region 02 - Gerar os objetos
+
+            Email email;
+            Password password;
+            User user;
+
+            try
+            {
+                email = new Email(request.Email);
+                password = new Password(request.Password);
+                user = new User(email, password)
+            }
+            catch
+            {
+
+            }
+
+            #endregion
 
             // 03 - Verificar se o usuário existe
 
