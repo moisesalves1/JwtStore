@@ -46,7 +46,7 @@ namespace JwtStore.Core.Contexts.AccountContext.UseCases.Create
             }
             catch (Exception ex)
             {
-                return new Response(ex.Message, 400)
+                return new Response(ex.Message, 400);
             }
 
             #endregion

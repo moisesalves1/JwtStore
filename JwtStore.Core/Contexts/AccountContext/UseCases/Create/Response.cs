@@ -15,7 +15,7 @@ namespace JwtStore.Core.Contexts.AccountContext.UseCases.Create
         {
             Message = message;
             Status = status;
-            Notifications = notifications
+            Notifications = notifications;
         }
 
         public Response(string message, ResponseData data)
