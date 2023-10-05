@@ -66,9 +66,33 @@ namespace JwtStore.Core.Contexts.AccountContext.UseCases.Create
 
             #endregion
 
-            // 04 - Persistir os dados
+            #region 04 - Persistir os dados
 
-            // 05 - Envia E-mail de ativação
+            try
+            {
+                await _repository.SaveAsync(user, cancellationToken);
+            } 
+            catch (Exception e)
+            {
+                return new Response("Falha ao persistir dados", 500);
+            }
+
+            #endregion
+
+            #region 05 - Envia E-mail de ativação
+
+            try
+            {
+                await _service.SendVerificationEmailAsync(user, cancellationToken);
+            }
+            catch (Exception e)
+            {
+                // Do nothing
+            }
+
+            #endregion
+
+            return new Response("Conta criada", new ResponseData(user.Id, user.Name, user.Email));
         }
     }
 }
