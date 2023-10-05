@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace JwtStore.Core.Contexts.AccountContext.UseCases.Create
 {
-    internal class Handler
+    public class Handler
     {
     }
 }
