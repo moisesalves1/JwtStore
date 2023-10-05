@@ -42,16 +42,29 @@ namespace JwtStore.Core.Contexts.AccountContext.UseCases.Create
             {
                 email = new Email(request.Email);
                 password = new Password(request.Password);
-                user = new User(email, password)
+                user = new User(request.Name, email, password);
             }
-            catch
+            catch (Exception ex)
             {
-
+                return new Response(ex.Message, 400)
             }
 
             #endregion
 
-            // 03 - Verificar se o usuário existe
+            #region 03 - Verificar se o usuário existe
+
+            try
+            {
+                var exists = await _repository.AnyAsync(request.Email, cancellationToken);
+                if (exists)
+                    return new Response("Este E-mail já está em uso", 400);
+            }
+            catch
+            {
+                return new Response("Falha ao verificar E-mail cadastrado", 500);
+            }
+
+            #endregion
 
             // 04 - Persistir os dados
 
