@@ -64,6 +64,7 @@ namespace JwtStore.Core.Contexts.AccountContext.UseCases.Authenticate
 
             #endregion
 
+
             #region 05. Retorna os dados
 
             try

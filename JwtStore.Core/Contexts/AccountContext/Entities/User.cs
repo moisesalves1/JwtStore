@@ -25,7 +25,7 @@ namespace JwtStore.Core.AccountContext.Entities
         public Email Email { get; private set; } = null!;
         public Password Password { get; private set; } = null!;
         public string Image { get; set; } = string.Empty;
-        public IEnumerable<Role> Roles { get; set; } = Enumerable.Empty<Role>();
+        public List<Role> Roles { get; set; } = new();
 
         public void UpdatePassword(string plainTextPassword, string code)
         {
