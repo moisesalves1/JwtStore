@@ -42,7 +42,7 @@ namespace JwtStore.Api.Extensions
                 return result.IsSuccess
                     ? Results.Created($"api/v1/users/{result.Data?.Id}", result)
                     : Results.Json(result, statusCode: result.Status);
-            });
+            }).RequireAuthorization("Admin");
 
             #endregion
 

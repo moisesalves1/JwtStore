@@ -57,7 +57,13 @@ namespace JwtStore.Api.Extensions
                         ValidateAudience = false
                     };
                 });
-            builder.Services.AddAuthorization();
+            builder.Services.AddAuthorization(
+                options =>
+                {
+                    options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
+                    options.AddPolicy("Student", policy => policy.RequireRole("Student"));
+                    options.AddPolicy("Premium", policy => policy.RequireRole("Premium"));
+                });
         }
 
         public static void AddMediator(this WebApplicationBuilder builder)
