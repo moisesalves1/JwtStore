@@ -16,4 +16,4 @@
 *   C# 11 e .NET 7
 
 ## Projeto do curso
-*   Uma solução Minimal APIs de ponta-a-ponta com criação de usuário e autenticação utilizando JWT Bearer
+*   Uma solução em Minimal APIs com criação de usuário e autenticação utilizando JWT Bearer

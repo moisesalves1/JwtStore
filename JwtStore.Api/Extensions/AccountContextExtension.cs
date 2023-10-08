@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using System.Runtime.CompilerServices;
 
 namespace JwtStore.Api.Extensions
@@ -26,6 +27,14 @@ namespace JwtStore.Api.Extensions
                 JwtStore.Infra.Contexts.AccountContext.UseCases.Authenticate.Repository>();
 
             #endregion
+
+            #region Verify
+
+            builder.Services.AddTransient<
+                JwtStore.Core.Contexts.AccountContext.UseCases.Verify.Contracts.IRepository,
+                JwtStore.Infra.Contexts.AccountContext.UseCases.Verify.Repository>();
+
+            #endregion
         }
 
         public static void MapAccountEndpoints(this WebApplication app)
@@ -42,7 +51,7 @@ namespace JwtStore.Api.Extensions
                 return result.IsSuccess
                     ? Results.Created($"api/v1/users/{result.Data?.Id}", result)
                     : Results.Json(result, statusCode: result.Status);
-            }).RequireAuthorization("Admin");
+            });
 
             #endregion
 
@@ -63,6 +72,23 @@ namespace JwtStore.Api.Extensions
                     return Results.Json(result, statusCode: 500);
 
                 result.Data.Token = JwtExtension.Generate(result.Data);
+                return Results.Ok(result);
+            });
+
+            #endregion
+
+            #region Verify
+
+            app.MapPost("api/v1/verify", async (
+                JwtStore.Core.Contexts.AccountContext.UseCases.Verify.Request request,
+                IRequestHandler<
+                    JwtStore.Core.Contexts.AccountContext.UseCases.Verify.Request,
+                    JwtStore.Core.Contexts.AccountContext.UseCases.Verify.Response> handler) =>
+            {
+                var result = await handler.Handle(request, new CancellationToken());
+                if (!result.IsSuccess)
+                    return Results.Json(result, statusCode: result.Status);
+
                 return Results.Ok(result);
             });
 
