@@ -21,8 +21,8 @@ namespace JwtStore.Api.Extensions
             Configuration.Secrets.PasswordSaltKey =
                 builder.Configuration.GetSection("Secrets").GetValue<string>("PasswordSaltKey") ?? string.Empty;
 
-            Configuration.SendGrid.ApiKey =
-                builder.Configuration.GetSection("SendGrid").GetValue<string>("ApiKey") ?? string.Empty;
+            Configuration.Brevo.ApiKey =
+                builder.Configuration.GetSection("Brevo").GetValue<string>("ApiKey") ?? string.Empty;
 
             Configuration.Email.DefaultFromName =
                 builder.Configuration.GetSection("Email").GetValue<string>("DefaultFromName") ?? string.Empty;
