@@ -10,7 +10,7 @@ namespace JwtStore.Core
     {
         public static SecretsConfiguration Secrets { get; set; } = new();
         public static EmailConfiguration Email { get; set; } = new();
-        public static SendGridConfiguration SendGrid { get; set; } = new();
+        public static BrevoConfiguration Brevo { get; set; } = new();
         public static DatabaseConfiguration Database { get; set; } = new();
         public class DatabaseConfiguration
         {
@@ -23,7 +23,7 @@ namespace JwtStore.Core
             public string DefaultFromName { get; set; } = string.Empty;
         }
 
-        public class SendGridConfiguration
+        public class BrevoConfiguration
         {
             public string ApiKey { get; set; } = string.Empty;
         }
