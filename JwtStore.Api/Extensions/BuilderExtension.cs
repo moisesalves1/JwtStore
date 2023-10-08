@@ -61,8 +61,7 @@ namespace JwtStore.Api.Extensions
                 options =>
                 {
                     options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
-                    options.AddPolicy("Student", policy => policy.RequireRole("Student"));
-                    options.AddPolicy("Premium", policy => policy.RequireRole("Premium"));
+                    options.AddPolicy("Usuario", policy => policy.RequireRole("Usuario"));
                 });
         }
 

@@ -15,6 +15,9 @@ namespace JwtStore.Infra.Contexts.AccountContext.UseCases.Create
 
         public async Task SaveAsync(User user, CancellationToken cancellationToken)
         {
+            var role = _context.Roles.FirstOrDefault(x => x.Name == "Usuario");
+            if (role != null)
+                user.Roles.Add(role);
             await _context.Users.AddAsync(user, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
         }

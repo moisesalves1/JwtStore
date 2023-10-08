@@ -12,7 +12,7 @@ namespace JwtStore.Infra.Contexts.AccountContext.UseCases.Verify
         public Repository(AppDbContext context) 
             => _context = context;
         public async Task<User?> GetUserByEmailAsync(string email, CancellationToken cancellationToken)
-            => await _context.Users.AsNoTracking().Include(x => x.Roles).FirstOrDefaultAsync(x => x.Email.Address == email, cancellationToken);
+            => await _context.Users.AsNoTracking().FirstOrDefaultAsync(x => x.Email.Address == email, cancellationToken);
         public async Task UpdateAsync(User user, CancellationToken cancellationToken)
         {
             _context.Users.Update(user);
