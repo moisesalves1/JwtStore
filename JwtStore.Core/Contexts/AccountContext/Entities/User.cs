@@ -27,10 +27,8 @@ namespace JwtStore.Core.AccountContext.Entities
         public string Image { get; set; } = string.Empty;
         public List<Role> Roles { get; set; } = new();
 
-        public void UpdatePassword(string plainTextPassword, string code)
+        public void UpdatePassword(string plainTextPassword)
         {
-            if (!string.Equals(code.Trim(), Password.ResetCode.Trim(), StringComparison.CurrentCultureIgnoreCase))
-                throw new InvalidVerificationException();
 
             var password = new Password(plainTextPassword);
             Password = password;
@@ -39,6 +37,11 @@ namespace JwtStore.Core.AccountContext.Entities
         public void UpdateEmail(Email email)
         {
             Email = email;
+        }
+
+        public void UpdateName(string name)
+        {
+            Name = name;
         }
 
         public void ChangePassword(string plainTextPassword)
