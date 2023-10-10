@@ -66,6 +66,30 @@ namespace JwtStore.Api.Extensions
                 JwtStore.Infra.Contexts.AccountContext.UseCases.ChangeEmail.Service>();
 
             #endregion
+
+            #region ResendVerificationCode
+
+            builder.Services.AddTransient<
+                JwtStore.Core.Contexts.AccountContext.UseCases.ResendVerificationCode.Contracts.IRepository,
+                JwtStore.Infra.Contexts.AccountContext.UseCases.ResendVerificationCode.Repository>();
+
+            builder.Services.AddTransient<
+                JwtStore.Core.Contexts.AccountContext.UseCases.ResendVerificationCode.Contracts.IService,
+                JwtStore.Infra.Contexts.AccountContext.UseCases.ResendVerificationCode.Service>();
+
+            #endregion
+
+            #region SendResetPasswordCode
+
+            builder.Services.AddTransient<
+                JwtStore.Core.Contexts.AccountContext.UseCases.SendResetPasswordCode.Contracts.IRepository,
+                JwtStore.Infra.Contexts.AccountContext.UseCases.SendResetPasswordCode.Repository>();
+
+            builder.Services.AddTransient<
+                JwtStore.Core.Contexts.AccountContext.UseCases.SendResetPasswordCode.Contracts.IService,
+                JwtStore.Infra.Contexts.AccountContext.UseCases.SendResetPasswordCode.Service>();
+
+            #endregion
         }
 
         public static void MapAccountEndpoints(this WebApplication app)
@@ -134,7 +158,7 @@ namespace JwtStore.Api.Extensions
                 IRequestHandler<
                     JwtStore.Core.Contexts.AccountContext.UseCases.ChangeName.Request,
                     JwtStore.Core.Contexts.AccountContext.UseCases.ChangeName.Response> handler,
-                    ClaimsPrincipal user ) =>
+                    ClaimsPrincipal user) =>
             {
                 request.JwtUserEmail = user?.Identity?.Name;
                 var result = await handler.Handle(request, new CancellationToken());
@@ -181,6 +205,40 @@ namespace JwtStore.Api.Extensions
 
                 return Results.Ok(result);
             }).RequireAuthorization("Usuario");
+
+            #endregion
+
+            #region ResendVerificationCode
+
+            app.MapPost("api/v1/resend-verification-code", async (
+                JwtStore.Core.Contexts.AccountContext.UseCases.ResendVerificationCode.Request request,
+                IRequestHandler<
+                    JwtStore.Core.Contexts.AccountContext.UseCases.ResendVerificationCode.Request,
+                    JwtStore.Core.Contexts.AccountContext.UseCases.ResendVerificationCode.Response> handler) =>
+            {
+                var result = await handler.Handle(request, new CancellationToken());
+                if (!result.IsSuccess)
+                    return Results.Json(result, statusCode: result.Status);
+
+                return Results.Ok(result);
+            });
+
+            #endregion
+
+            #region ResendVerificationCode
+
+            app.MapPost("api/v1/send-reset-password-code", async (
+                JwtStore.Core.Contexts.AccountContext.UseCases.SendResetPasswordCode.Request request,
+                IRequestHandler<
+                    JwtStore.Core.Contexts.AccountContext.UseCases.SendResetPasswordCode.Request,
+                    JwtStore.Core.Contexts.AccountContext.UseCases.SendResetPasswordCode.Response> handler) =>
+            {
+                var result = await handler.Handle(request, new CancellationToken());
+                if (!result.IsSuccess)
+                    return Results.Json(result, statusCode: result.Status);
+
+                return Results.Ok(result);
+            });
 
             #endregion
 
