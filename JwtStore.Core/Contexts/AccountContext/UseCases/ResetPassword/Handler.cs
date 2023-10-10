@@ -1,33 +1,36 @@
 ﻿using JwtStore.Core.AccountContext.Entities;
 using JwtStore.Core.AccountContext.ValueObjects;
-using JwtStore.Core.Contexts.AccountContext.UseCases.ChangePassword.Contracts;
+using JwtStore.Core.Contexts.AccountContext.UseCases.ResetPassword.Contracts;
 using MediatR;
 
-namespace JwtStore.Core.Contexts.AccountContext.UseCases.ChangePassword
+namespace JwtStore.Core.Contexts.AccountContext.UseCases.ResetPassword
 {
-    public class Handler : IRequestHandler<Request, Response>
+    public class Handler :IRequestHandler<Request, Response>
     {
         private readonly IRepository _repository;
 
         public Handler(IRepository repository)
-            => _repository = repository;
+        {
+            _repository = repository;
+        }
 
         public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
         {
-            #region 01. Valida a requisição
+            #region 01 - Valida a requisição
 
             try
             {
                 var res = Specification.Ensure(request);
                 if (!res.IsValid)
-                    return new Response("Requisição inválida", 400, res.Notifications);
-            }
+                    return new Response("Requisicação inválida", 400, res.Notifications);
+            } 
             catch
             {
                 return new Response("Não foi possível validar sua requisição", 500);
             }
 
             #endregion
+
 
             #region 02. Recupera o perfil
 
@@ -45,22 +48,12 @@ namespace JwtStore.Core.Contexts.AccountContext.UseCases.ChangePassword
 
             #endregion
 
-
-
-            #region 03 - Verifica se a senha atual está correta
-
-            if (!user.Password.Challenge(request.ActualPassword))
-            {
-                return new Response("Senha atual inválida", 400);
-            }
-
-            #endregion
-
-            #region 04 - Altera a senha do usuário
+            #region 03 - Verifica se o ResetCode está correto
 
             try
             {
-               user.UpdatePassword(request.NewPassword);
+                if(user.Password.ResetCode != request.ResetPasswordCode)
+                    return new Response("Código de Reset de Senha incorreto", 400);
             }
             catch (Exception e)
             {
@@ -69,6 +62,18 @@ namespace JwtStore.Core.Contexts.AccountContext.UseCases.ChangePassword
 
             #endregion
 
+            #region 04 - Altera a senha do usuário
+
+            try
+            {
+                user.UpdatePassword(request.NewPassword);
+            }
+            catch (Exception e)
+            {
+                return new Response("Falha ao alterar senha", 500);
+            }
+
+            #endregion
 
             #region 05 - Persistir os dados
 
@@ -84,9 +89,10 @@ namespace JwtStore.Core.Contexts.AccountContext.UseCases.ChangePassword
             #endregion
 
 
+
             #region 06. Retorna os dados
 
-            return new Response("Senha alterada com sucesso", 201);
+            return new Response("Sua senha foi redefinida com sucesso", 201);
 
             #endregion
         }

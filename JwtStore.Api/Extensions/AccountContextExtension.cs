@@ -90,6 +90,14 @@ namespace JwtStore.Api.Extensions
                 JwtStore.Infra.Contexts.AccountContext.UseCases.SendResetPasswordCode.Service>();
 
             #endregion
+
+            #region ResetPassword
+
+            builder.Services.AddTransient<
+                JwtStore.Core.Contexts.AccountContext.UseCases.ResetPassword.Contracts.IRepository,
+                JwtStore.Infra.Contexts.AccountContext.UseCases.ResetPassword.Repository>();
+
+            #endregion
         }
 
         public static void MapAccountEndpoints(this WebApplication app)
@@ -225,13 +233,30 @@ namespace JwtStore.Api.Extensions
 
             #endregion
 
-            #region ResendVerificationCode
+            #region SendResetPasswordCode
 
             app.MapPost("api/v1/send-reset-password-code", async (
                 JwtStore.Core.Contexts.AccountContext.UseCases.SendResetPasswordCode.Request request,
                 IRequestHandler<
                     JwtStore.Core.Contexts.AccountContext.UseCases.SendResetPasswordCode.Request,
                     JwtStore.Core.Contexts.AccountContext.UseCases.SendResetPasswordCode.Response> handler) =>
+            {
+                var result = await handler.Handle(request, new CancellationToken());
+                if (!result.IsSuccess)
+                    return Results.Json(result, statusCode: result.Status);
+
+                return Results.Ok(result);
+            });
+
+            #endregion
+
+            #region ResetPassword
+
+            app.MapPost("api/v1/reset-password", async (
+                JwtStore.Core.Contexts.AccountContext.UseCases.ResetPassword.Request request,
+                IRequestHandler<
+                    JwtStore.Core.Contexts.AccountContext.UseCases.ResetPassword.Request,
+                    JwtStore.Core.Contexts.AccountContext.UseCases.ResetPassword.Response> handler) =>
             {
                 var result = await handler.Handle(request, new CancellationToken());
                 if (!result.IsSuccess)
