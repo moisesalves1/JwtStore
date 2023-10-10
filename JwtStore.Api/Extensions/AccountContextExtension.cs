@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Runtime.CompilerServices;
+using System.Security.Claims;
 
 namespace JwtStore.Api.Extensions
 {
@@ -132,8 +133,10 @@ namespace JwtStore.Api.Extensions
                 JwtStore.Core.Contexts.AccountContext.UseCases.ChangeName.Request request,
                 IRequestHandler<
                     JwtStore.Core.Contexts.AccountContext.UseCases.ChangeName.Request,
-                    JwtStore.Core.Contexts.AccountContext.UseCases.ChangeName.Response> handler) =>
+                    JwtStore.Core.Contexts.AccountContext.UseCases.ChangeName.Response> handler,
+                    ClaimsPrincipal user ) =>
             {
+                request.JwtUserEmail = user?.Identity?.Name;
                 var result = await handler.Handle(request, new CancellationToken());
                 if (!result.IsSuccess)
                     return Results.Json(result, statusCode: result.Status);
@@ -149,8 +152,10 @@ namespace JwtStore.Api.Extensions
                 JwtStore.Core.Contexts.AccountContext.UseCases.ChangePassword.Request request,
                 IRequestHandler<
                     JwtStore.Core.Contexts.AccountContext.UseCases.ChangePassword.Request,
-                    JwtStore.Core.Contexts.AccountContext.UseCases.ChangePassword.Response> handler) =>
+                    JwtStore.Core.Contexts.AccountContext.UseCases.ChangePassword.Response> handler,
+                    ClaimsPrincipal user) =>
             {
+                request.JwtUserEmail = user?.Identity?.Name;
                 var result = await handler.Handle(request, new CancellationToken());
                 if (!result.IsSuccess)
                     return Results.Json(result, statusCode: result.Status);
@@ -166,8 +171,10 @@ namespace JwtStore.Api.Extensions
                 JwtStore.Core.Contexts.AccountContext.UseCases.ChangeEmail.Request request,
                 IRequestHandler<
                     JwtStore.Core.Contexts.AccountContext.UseCases.ChangeEmail.Request,
-                    JwtStore.Core.Contexts.AccountContext.UseCases.ChangeEmail.Response> handler) =>
+                    JwtStore.Core.Contexts.AccountContext.UseCases.ChangeEmail.Response> handler,
+                    ClaimsPrincipal user) =>
             {
+                request.JwtUserEmail = user?.Identity?.Name;
                 var result = await handler.Handle(request, new CancellationToken());
                 if (!result.IsSuccess)
                     return Results.Json(result, statusCode: result.Status);

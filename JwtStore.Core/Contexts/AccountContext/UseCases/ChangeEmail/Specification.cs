@@ -9,6 +9,7 @@ namespace JwtStore.Core.Contexts.AccountContext.UseCases.ChangeEmail
             => new Contract<Notification>()
                 .Requires()
                 .IsEmail(request.NewEmail, "NewEmail", "Novo e-mail inválido")
-                .IsEmail(request.ActualEmail, "ActualEmail", "E=mail atual inválido");
+                .IsEmail(request.ActualEmail, "ActualEmail", "E=mail atual inválido")
+                .AreEquals(request.ActualEmail, request.JwtUserEmail, "Não autorizado", "Não é possível alterar o e-mail de outro usuário");
     }
 }

@@ -1,4 +1,5 @@
 ﻿using JwtStore.Core.AccountContext.Entities;
+using JwtStore.Core.AccountContext.ValueObjects.Exceptions;
 using JwtStore.Core.Contexts.AccountContext.UseCases.Verify.Contracts;
 using MediatR;
 
@@ -45,6 +46,8 @@ namespace JwtStore.Core.Contexts.AccountContext.UseCases.Verify
             #endregion
 
 
+
+
             #region 03. Checa se a conta está verificada
 
             try
@@ -54,6 +57,13 @@ namespace JwtStore.Core.Contexts.AccountContext.UseCases.Verify
                 if (!user.Email.Verification.IsActive)
                     return new Response("Não foi possível ativar sua conta", 400);
 
+                if(user.Email.Verification.ExpiresAt.Value < DateTime.UtcNow)
+                    return new Response("Código de ativação expirado", 400);
+
+            }
+            catch (InvalidVerificationException e)
+            {
+                return new Response(e.Message, 500);
             }
             catch
             {

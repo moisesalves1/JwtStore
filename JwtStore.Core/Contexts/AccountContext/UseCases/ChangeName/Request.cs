@@ -2,9 +2,11 @@
 
 namespace JwtStore.Core.Contexts.AccountContext.UseCases.ChangeName
 {
-    public record Request(
-        string Name,
-        string Email,
-        string JwtUserEmail
-        ) : IRequest<Response>;
+   
+    public class Request : IRequest<Response>
+    {
+        public string Name { get; init; }
+        public string Email { get; init; }
+        public string JwtUserEmail { get; set; }
+    }
 }

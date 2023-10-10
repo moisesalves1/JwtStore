@@ -2,9 +2,11 @@
 
 namespace JwtStore.Core.Contexts.AccountContext.UseCases.ChangePassword
 {
-    public record Request(
-        string ActualPassword,
-        string NewPassword,
-        string Email
-        ) : IRequest<Response>;
+    public class Request : IRequest<Response>
+    {
+        public string ActualPassword { get; init; }
+        public string NewPassword { get; init; }
+        public string Email { get; init; }
+        public string JwtUserEmail { get; set; }
+    }
 }

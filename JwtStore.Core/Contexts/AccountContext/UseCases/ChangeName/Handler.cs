@@ -13,6 +13,8 @@ namespace JwtStore.Core.Contexts.AccountContext.UseCases.ChangeName
 
         public async Task<Response> Handle(Request request, CancellationToken cancellationToken)
         {
+
+
             #region 01. Valida a requisição
 
             try
@@ -45,6 +47,8 @@ namespace JwtStore.Core.Contexts.AccountContext.UseCases.ChangeName
             }
 
             #endregion
+
+
 
             #region 03 - Altera o nome do usuário
 
