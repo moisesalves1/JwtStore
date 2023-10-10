@@ -98,6 +98,14 @@ namespace JwtStore.Api.Extensions
                 JwtStore.Infra.Contexts.AccountContext.UseCases.ResetPassword.Repository>();
 
             #endregion
+
+            #region Details
+
+            builder.Services.AddTransient<
+                JwtStore.Core.Contexts.AccountContext.UseCases.Details.Contracts.IRepository,
+                JwtStore.Infra.Contexts.AccountContext.UseCases.Details.Repository>();
+
+            #endregion
         }
 
         public static void MapAccountEndpoints(this WebApplication app)
@@ -264,6 +272,25 @@ namespace JwtStore.Api.Extensions
 
                 return Results.Ok(result);
             });
+
+            #endregion
+
+            #region Details
+
+            app.MapPost("api/v1/details", async (
+                JwtStore.Core.Contexts.AccountContext.UseCases.Details.Request request,
+                IRequestHandler<
+                    JwtStore.Core.Contexts.AccountContext.UseCases.Details.Request,
+                    JwtStore.Core.Contexts.AccountContext.UseCases.Details.Response> handler,
+                ClaimsPrincipal user) =>
+            {
+                request.JwtUserEmail = user?.Identity?.Name;
+                var result = await handler.Handle(request, new CancellationToken());
+                if (!result.IsSuccess)
+                    return Results.Json(result, statusCode: result.Status);
+
+                return Results.Ok(result);
+            }).RequireAuthorization("Usuario");
 
             #endregion
 
