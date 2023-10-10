@@ -64,6 +64,8 @@ namespace JwtStore.Api.Extensions
                     options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
                     options.AddPolicy("Usuario", policy => policy.RequireRole("Usuario"));
                 });
+
+            builder.Services.AddCors();
         }
 
         public static void AddMediator(this WebApplicationBuilder builder)
