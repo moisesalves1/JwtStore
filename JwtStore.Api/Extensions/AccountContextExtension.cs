@@ -13,101 +13,17 @@ namespace JwtStore.Api.Extensions
     {
         public static void AddAccountContext(this WebApplicationBuilder builder)
         {
-            #region Create
 
             builder.Services.AddTransient<
-                JwtStore.Core.Contexts.AccountContext.UseCases.Create.Contracts.IRepository,
-                JwtStore.Infra.Contexts.AccountContext.UseCases.Create.Repository>();
+                JwtStore.Core.Contexts.AccountContext.UseCases.IRepository,
+                JwtStore.Infra.Contexts.AccountContext.UseCases.Repository>();
 
             builder.Services.AddTransient<
-                JwtStore.Core.Contexts.AccountContext.UseCases.Create.Contracts.IService,
-                JwtStore.Infra.Contexts.AccountContext.UseCases.Create.Service>();
+                JwtStore.Core.Contexts.AccountContext.UseCases.IService,
+                JwtStore.Infra.Contexts.AccountContext.UseCases.Service>();
 
-            #endregion
 
-            #region Authenticate
-
-            builder.Services.AddTransient<
-                JwtStore.Core.Contexts.AccountContext.UseCases.Authenticate.Contracts.IRepository,
-                JwtStore.Infra.Contexts.AccountContext.UseCases.Authenticate.Repository>();
-
-            #endregion
-
-            #region Verify
-
-            builder.Services.AddTransient<
-                JwtStore.Core.Contexts.AccountContext.UseCases.Verify.Contracts.IRepository,
-                JwtStore.Infra.Contexts.AccountContext.UseCases.Verify.Repository>();
-
-            #endregion
-
-            #region ChangeName
-
-            builder.Services.AddTransient<
-                JwtStore.Core.Contexts.AccountContext.UseCases.ChangeName.Contracts.IRepository,
-                JwtStore.Infra.Contexts.AccountContext.UseCases.ChangeName.Repository>();
-
-            #endregion
-
-            #region ChangePassword
-
-            builder.Services.AddTransient<
-                JwtStore.Core.Contexts.AccountContext.UseCases.ChangePassword.Contracts.IRepository,
-                JwtStore.Infra.Contexts.AccountContext.UseCases.ChangePassword.Repository>();
-
-            #endregion
-
-            #region ChangeEmail
-
-            builder.Services.AddTransient<
-                JwtStore.Core.Contexts.AccountContext.UseCases.ChangeEmail.Contracts.IRepository,
-                JwtStore.Infra.Contexts.AccountContext.UseCases.ChangeEmail.Repository>();
-
-            builder.Services.AddTransient<
-                JwtStore.Core.Contexts.AccountContext.UseCases.ChangeEmail.Contracts.IService,
-                JwtStore.Infra.Contexts.AccountContext.UseCases.ChangeEmail.Service>();
-
-            #endregion
-
-            #region ResendVerificationCode
-
-            builder.Services.AddTransient<
-                JwtStore.Core.Contexts.AccountContext.UseCases.ResendVerificationCode.Contracts.IRepository,
-                JwtStore.Infra.Contexts.AccountContext.UseCases.ResendVerificationCode.Repository>();
-
-            builder.Services.AddTransient<
-                JwtStore.Core.Contexts.AccountContext.UseCases.ResendVerificationCode.Contracts.IService,
-                JwtStore.Infra.Contexts.AccountContext.UseCases.ResendVerificationCode.Service>();
-
-            #endregion
-
-            #region SendResetPasswordCode
-
-            builder.Services.AddTransient<
-                JwtStore.Core.Contexts.AccountContext.UseCases.SendResetPasswordCode.Contracts.IRepository,
-                JwtStore.Infra.Contexts.AccountContext.UseCases.SendResetPasswordCode.Repository>();
-
-            builder.Services.AddTransient<
-                JwtStore.Core.Contexts.AccountContext.UseCases.SendResetPasswordCode.Contracts.IService,
-                JwtStore.Infra.Contexts.AccountContext.UseCases.SendResetPasswordCode.Service>();
-
-            #endregion
-
-            #region ResetPassword
-
-            builder.Services.AddTransient<
-                JwtStore.Core.Contexts.AccountContext.UseCases.ResetPassword.Contracts.IRepository,
-                JwtStore.Infra.Contexts.AccountContext.UseCases.ResetPassword.Repository>();
-
-            #endregion
-
-            #region Details
-
-            builder.Services.AddTransient<
-                JwtStore.Core.Contexts.AccountContext.UseCases.Details.Contracts.IRepository,
-                JwtStore.Infra.Contexts.AccountContext.UseCases.Details.Repository>();
-
-            #endregion
+      
         }
 
         public static void MapAccountEndpoints(this WebApplication app)

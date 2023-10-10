@@ -1,9 +1,9 @@
 ﻿using JwtStore.Core;
 using JwtStore.Core.AccountContext.Entities;
-using JwtStore.Core.Contexts.AccountContext.UseCases.Create.Contracts;
+using JwtStore.Core.Contexts.AccountContext.UseCases;
 using SendWithBrevo;
 
-namespace JwtStore.Infra.Contexts.AccountContext.UseCases.Create
+namespace JwtStore.Infra.Contexts.AccountContext.UseCases
 {
     public class Service : IService
     {
@@ -24,6 +24,23 @@ namespace JwtStore.Infra.Contexts.AccountContext.UseCases.Create
 
             var subject = "Verifique sua conta";
             var content = $"Código {user.Email.Verification.Code}";
+
+
+            await client.SendAsync(
+                new Sender(Configuration.Email.DefaultFromName, Configuration.Email.DefaultFromEmail),
+                new List<Recipient> { new Recipient(user.Name, user.Email) },
+                subject,
+                content,
+                false
+                );
+        }
+
+        public async Task SendResetPasswordCodeAsync(User user, CancellationToken cancellationToken)
+        {
+            BrevoClient client = new BrevoClient(Configuration.Brevo.ApiKey);
+
+            var subject = "Redefina sua senha";
+            var content = $"Código {user.Password.ResetCode}";
 
 
             await client.SendAsync(

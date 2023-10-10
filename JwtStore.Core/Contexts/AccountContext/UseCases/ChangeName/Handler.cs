@@ -1,5 +1,4 @@
 ﻿using JwtStore.Core.AccountContext.Entities;
-using JwtStore.Core.Contexts.AccountContext.UseCases.ChangeName.Contracts;
 using MediatR;
 
 namespace JwtStore.Core.Contexts.AccountContext.UseCases.ChangeName

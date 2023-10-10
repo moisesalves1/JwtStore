@@ -1,6 +1,5 @@
 ﻿using JwtStore.Core.AccountContext.Entities;
 using JwtStore.Core.AccountContext.ValueObjects;
-using JwtStore.Core.Contexts.AccountContext.UseCases.ResendVerificationCode.Contracts;
 using MediatR;
 
 namespace JwtStore.Core.Contexts.AccountContext.UseCases.ResendVerificationCode
