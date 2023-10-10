@@ -8,8 +8,8 @@ namespace JwtStore.Core.Contexts.AccountContext.UseCases.Authenticate
         public static Contract<Notification> Ensure(Request request)
             => new Contract<Notification>()
                 .Requires()
-                .IsLowerThan(request.Password.Length, 40, "Name", "A senha deve conter menos que 40 caracteres")
-                .IsGreaterThan(request.Password.Length, 8, "Name", "O nome deve conter mais que 8 caracteres")
+                .IsLowerThan(request.Password.Length, 40, "Password", "A senha deve conter menos que 40 caracteres")
+                .IsGreaterThan(request.Password.Length, 8, "Password", "A senha deve conter mais que 8 caracteres")
                 .IsEmail(request.Email, "Email", "E-mail inválido");
     }
 }

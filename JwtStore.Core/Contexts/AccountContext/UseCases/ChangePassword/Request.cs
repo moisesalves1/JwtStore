@@ -6,7 +6,6 @@ namespace JwtStore.Core.Contexts.AccountContext.UseCases.ChangePassword
     {
         public string ActualPassword { get; init; }
         public string NewPassword { get; init; }
-        public string Email { get; init; }
         public string JwtUserEmail { get; set; }
     }
 }

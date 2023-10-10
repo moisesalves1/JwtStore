@@ -37,7 +37,7 @@ namespace JwtStore.Core.Contexts.AccountContext.UseCases.ChangeName
             User? user;
             try
             {
-                user = await _repository.GetUserByEmailAsync(request.Email, cancellationToken);
+                user = await _repository.GetUserByEmailAsync(request.JwtUserEmail, cancellationToken);
                 if (user is null)
                     return new Response("Perfil não encontrado", 404);
             }

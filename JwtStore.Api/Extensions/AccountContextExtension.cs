@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Runtime.CompilerServices;
 using System.Security.Claims;
+using Microsoft.AspNetCore.OpenApi;
+using Microsoft.OpenApi.Models;
 
 namespace JwtStore.Api.Extensions
 {
@@ -122,10 +124,36 @@ namespace JwtStore.Api.Extensions
                 return result.IsSuccess
                     ? Results.Created($"api/v1/users/{result.Data?.Id}", result)
                     : Results.Json(result, statusCode: result.Status);
+            }).WithOpenApi(operation => new(operation)
+            {
+                Summary = "User creation",
+                Tags = new List<OpenApiTag> { new() { Name = "AccountContext"} }
             });
 
             #endregion
 
+            #region Verify
+
+            app.MapPost("api/v1/verify", async (
+                JwtStore.Core.Contexts.AccountContext.UseCases.Verify.Request request,
+                IRequestHandler<
+                    JwtStore.Core.Contexts.AccountContext.UseCases.Verify.Request,
+                    JwtStore.Core.Contexts.AccountContext.UseCases.Verify.Response> handler) =>
+            {
+                var result = await handler.Handle(request, new CancellationToken());
+                if (!result.IsSuccess)
+                    return Results.Json(result, statusCode: result.Status);
+
+                return Results.Ok(result);
+            }).WithOpenApi(operation => new(operation)
+            {
+                Summary = "User verification",
+                Tags = new List<OpenApiTag> { new() { Name = "AccountContext" } }
+            });
+
+
+
+            #endregion
 
             #region Authenticate
 
@@ -144,83 +172,11 @@ namespace JwtStore.Api.Extensions
 
                 result.Data.Token = JwtExtension.Generate(result.Data);
                 return Results.Ok(result);
+            }).WithOpenApi(operation => new(operation)
+            {
+                Summary = "Authentication",
+                Tags = new List<OpenApiTag> { new() { Name = "AccountContext" } }
             });
-
-            #endregion
-
-            #region Verify
-
-            app.MapPost("api/v1/verify", async (
-                JwtStore.Core.Contexts.AccountContext.UseCases.Verify.Request request,
-                IRequestHandler<
-                    JwtStore.Core.Contexts.AccountContext.UseCases.Verify.Request,
-                    JwtStore.Core.Contexts.AccountContext.UseCases.Verify.Response> handler) =>
-            {
-                var result = await handler.Handle(request, new CancellationToken());
-                if (!result.IsSuccess)
-                    return Results.Json(result, statusCode: result.Status);
-
-                return Results.Ok(result);
-            });
-
-
-
-            #endregion
-
-            #region ChangeName
-
-            app.MapPost("api/v1/change-name", async (
-                JwtStore.Core.Contexts.AccountContext.UseCases.ChangeName.Request request,
-                IRequestHandler<
-                    JwtStore.Core.Contexts.AccountContext.UseCases.ChangeName.Request,
-                    JwtStore.Core.Contexts.AccountContext.UseCases.ChangeName.Response> handler,
-                    ClaimsPrincipal user) =>
-            {
-                request.JwtUserEmail = user?.Identity?.Name;
-                var result = await handler.Handle(request, new CancellationToken());
-                if (!result.IsSuccess)
-                    return Results.Json(result, statusCode: result.Status);
-
-                return Results.Ok(result);
-            }).RequireAuthorization("Usuario");
-
-            #endregion
-
-            #region ChangePassword
-
-            app.MapPost("api/v1/change-password", async (
-                JwtStore.Core.Contexts.AccountContext.UseCases.ChangePassword.Request request,
-                IRequestHandler<
-                    JwtStore.Core.Contexts.AccountContext.UseCases.ChangePassword.Request,
-                    JwtStore.Core.Contexts.AccountContext.UseCases.ChangePassword.Response> handler,
-                    ClaimsPrincipal user) =>
-            {
-                request.JwtUserEmail = user?.Identity?.Name;
-                var result = await handler.Handle(request, new CancellationToken());
-                if (!result.IsSuccess)
-                    return Results.Json(result, statusCode: result.Status);
-
-                return Results.Ok(result);
-            }).RequireAuthorization("Usuario");
-
-            #endregion
-
-            #region ChangeEmail
-
-            app.MapPost("api/v1/change-email", async (
-                JwtStore.Core.Contexts.AccountContext.UseCases.ChangeEmail.Request request,
-                IRequestHandler<
-                    JwtStore.Core.Contexts.AccountContext.UseCases.ChangeEmail.Request,
-                    JwtStore.Core.Contexts.AccountContext.UseCases.ChangeEmail.Response> handler,
-                    ClaimsPrincipal user) =>
-            {
-                request.JwtUserEmail = user?.Identity?.Name;
-                var result = await handler.Handle(request, new CancellationToken());
-                if (!result.IsSuccess)
-                    return Results.Json(result, statusCode: result.Status);
-
-                return Results.Ok(result);
-            }).RequireAuthorization("Usuario");
 
             #endregion
 
@@ -237,6 +193,10 @@ namespace JwtStore.Api.Extensions
                     return Results.Json(result, statusCode: result.Status);
 
                 return Results.Ok(result);
+            }).WithOpenApi(operation => new(operation)
+            {
+                Summary = "Resend Verification Code",
+                Tags = new List<OpenApiTag> { new() { Name = "AccountContext" } }
             });
 
             #endregion
@@ -254,6 +214,10 @@ namespace JwtStore.Api.Extensions
                     return Results.Json(result, statusCode: result.Status);
 
                 return Results.Ok(result);
+            }).WithOpenApi(operation => new(operation)
+            {
+                Summary = "Send Reset Password Code",
+                Tags = new List<OpenApiTag> { new() { Name = "AccountContext" } }
             });
 
             #endregion
@@ -271,18 +235,22 @@ namespace JwtStore.Api.Extensions
                     return Results.Json(result, statusCode: result.Status);
 
                 return Results.Ok(result);
+            }).WithOpenApi(operation => new(operation)
+            {
+                Summary = "Reset Password",
+                Tags = new List<OpenApiTag> { new() { Name = "AccountContext" } }
             });
 
             #endregion
 
-            #region Details
+            #region ChangeName
 
-            app.MapPost("api/v1/details", async (
-                JwtStore.Core.Contexts.AccountContext.UseCases.Details.Request request,
+            app.MapPut("api/v1/change-name", async (
+                JwtStore.Core.Contexts.AccountContext.UseCases.ChangeName.Request request,
                 IRequestHandler<
-                    JwtStore.Core.Contexts.AccountContext.UseCases.Details.Request,
-                    JwtStore.Core.Contexts.AccountContext.UseCases.Details.Response> handler,
-                ClaimsPrincipal user) =>
+                    JwtStore.Core.Contexts.AccountContext.UseCases.ChangeName.Request,
+                    JwtStore.Core.Contexts.AccountContext.UseCases.ChangeName.Response> handler,
+                    ClaimsPrincipal user) =>
             {
                 request.JwtUserEmail = user?.Identity?.Name;
                 var result = await handler.Handle(request, new CancellationToken());
@@ -290,7 +258,82 @@ namespace JwtStore.Api.Extensions
                     return Results.Json(result, statusCode: result.Status);
 
                 return Results.Ok(result);
-            }).RequireAuthorization("Usuario");
+            }).RequireAuthorization("Usuario").WithOpenApi(operation => new(operation)
+            {
+                Summary = "Change Name",
+                Tags = new List<OpenApiTag> { new() { Name = "AccountContext" } }
+            });
+
+            #endregion
+
+            #region ChangePassword
+
+            app.MapPut("api/v1/change-password", async (
+                JwtStore.Core.Contexts.AccountContext.UseCases.ChangePassword.Request request,
+                IRequestHandler<
+                    JwtStore.Core.Contexts.AccountContext.UseCases.ChangePassword.Request,
+                    JwtStore.Core.Contexts.AccountContext.UseCases.ChangePassword.Response> handler,
+                    ClaimsPrincipal user) =>
+            {
+                request.JwtUserEmail = user?.Identity?.Name;
+                var result = await handler.Handle(request, new CancellationToken());
+                if (!result.IsSuccess)
+                    return Results.Json(result, statusCode: result.Status);
+
+                return Results.Ok(result);
+            }).RequireAuthorization("Usuario").WithOpenApi(operation => new(operation)
+            {
+                Summary = "Change Password",
+                Tags = new List<OpenApiTag> { new() { Name = "AccountContext" } }
+            });
+
+            #endregion
+
+            #region ChangeEmail
+
+            app.MapPut("api/v1/change-email", async (
+                JwtStore.Core.Contexts.AccountContext.UseCases.ChangeEmail.Request request,
+                IRequestHandler<
+                    JwtStore.Core.Contexts.AccountContext.UseCases.ChangeEmail.Request,
+                    JwtStore.Core.Contexts.AccountContext.UseCases.ChangeEmail.Response> handler,
+                    ClaimsPrincipal user) =>
+            {
+                request.JwtUserEmail = user?.Identity?.Name;
+                var result = await handler.Handle(request, new CancellationToken());
+                if (!result.IsSuccess)
+                    return Results.Json(result, statusCode: result.Status);
+
+                return Results.Ok(result);
+            }).RequireAuthorization("Usuario").WithOpenApi(operation => new(operation)
+            {
+                Summary = "Change E-mail",
+                Tags = new List<OpenApiTag> { new() { Name = "AccountContext" } }
+            });
+
+            #endregion
+
+            #region Details
+
+            app.MapGet("api/v1/details", async (
+                IRequestHandler<
+                    JwtStore.Core.Contexts.AccountContext.UseCases.Details.Request,
+                    JwtStore.Core.Contexts.AccountContext.UseCases.Details.Response> handler,
+                ClaimsPrincipal user) =>
+            {
+                var request = new JwtStore.Core.Contexts.AccountContext.UseCases.Details.Request
+                {
+                    JwtUserEmail = user?.Identity?.Name
+                };
+                var result = await handler.Handle(request, new CancellationToken());
+                if (!result.IsSuccess)
+                    return Results.Json(result, statusCode: result.Status);
+
+                return Results.Ok(result);
+            }).RequireAuthorization("Usuario").WithOpenApi(operation => new(operation)
+            {
+                Summary = "Get User Details",
+                Tags = new List<OpenApiTag> { new() { Name = "AccountContext" } }
+            });
 
             #endregion
 

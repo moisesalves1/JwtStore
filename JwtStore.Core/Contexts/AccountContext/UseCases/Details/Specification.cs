@@ -8,7 +8,6 @@ namespace JwtStore.Core.Contexts.AccountContext.UseCases.Details
         public static Contract<Notification> Ensure(Request request)
             => new Contract<Notification>()
                 .Requires()
-                .IsEmail(request.Email, "Email", "E-mail inválido")
-                .AreEquals(request.Email, request.JwtUserEmail, "Não autorizado", "Não é possível visualizar detalhes de outro usuário");
+                .IsEmail(request.JwtUserEmail, "Email", "E-mail inválido");
     }
 }

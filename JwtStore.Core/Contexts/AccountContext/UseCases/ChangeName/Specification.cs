@@ -10,7 +10,6 @@ namespace JwtStore.Core.Contexts.AccountContext.UseCases.ChangeName
                 .Requires()
                 .IsLowerThan(request.Name.Length, 160, "Name", "O nome deve conter menos que 160 caracteres")
                 .IsGreaterThan(request.Name.Length, 3, "Name", "O nome deve conter mais que 3 caracteres")
-                .IsEmail(request.Email, "Email", "E-mail inválido")
-                .AreEquals(request.Email, request.JwtUserEmail, "Não autorizado", "Não é possível alterar o nome de outro usuário");
+                .IsEmail(request.JwtUserEmail, "Email", "E-mail inválido");
     }
 }

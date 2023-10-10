@@ -12,7 +12,7 @@ namespace JwtStore.Core.Contexts.AccountContext.UseCases.ChangePassword
                 .IsGreaterThan(request.ActualPassword.Length, 8, "Senha atual", "A senha atual conter mais que 8 caracteres")
                 .IsLowerThan(request.NewPassword.Length, 40, "Nova Senha", "A nova senha deve conter menos que 40 caracteres")
                 .IsGreaterThan(request.NewPassword.Length, 8, "Nova Senha", "A nova senha deve conter mais que 8 caracteres")
-                .IsEmail(request.Email, "Email", "E-mail inválido")
-                .AreEquals(request.Email, request.JwtUserEmail, "Não autorizado", "Não é possível alterar a senha de outro usuário");
+                .AreNotEquals(request.NewPassword, request.ActualPassword, "Senhas iguais", "A nova senha deve ser diferente da atual")
+                .IsEmail(request.JwtUserEmail, "Email", "E-mail inválido");
     }
 }
