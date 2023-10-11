@@ -31,9 +31,18 @@ namespace JwtStore.Core.Contexts.AccountContext.UseCases.GetUsers
             #endregion
 
             List<ResponseData> allUsers = new();
-            users.ForEach(user =>
-                allUsers.Add(new ResponseData(user.Id, user.Name, user.Email, user.Email.Verification.VerifiedAt, user.Image))
-            );
+            users.ForEach(user => {
+                var usr = new ResponseData
+                {
+                    Id = user.Id.ToString(),
+                    Name = user.Name,
+                    Email = user.Email,
+                    VerifiedAt = user.Email.Verification.VerifiedAt,
+                    Image = user.Image,
+                    Roles = user.Roles.Select(x => x.Name).ToArray()
+                };
+                allUsers.Add(usr);
+            });
 
 
             #region 05. Retorna os dados

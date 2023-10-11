@@ -29,6 +29,14 @@ namespace JwtStore.Core.Contexts.AccountContext.UseCases.GetUsers
         public List<ResponseData> Data { get; set; }
     }
 
-    public record ResponseData(Guid Id, string Name, string Email, DateTime? VerifiedAt, string Image);
+    public class ResponseData
+    {
+        public string Id { get; set; } = string.Empty;
+        public string Name { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public DateTime? VerifiedAt { get; set; } = null;
+        public string Image { get; set; } = string.Empty;
+        public string[] Roles { get; set; } = Array.Empty<string>();
+    }
 }
 
