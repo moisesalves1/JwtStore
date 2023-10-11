@@ -6,6 +6,7 @@ namespace JwtStore.Core.Contexts.AccountContext.UseCases
     {
         Task<bool> AnyAsync(string email, CancellationToken cancellationToken);
         Task<User?> GetUserByEmailAsync(string email, CancellationToken cancellationToken);
+        Task<List<User>?> GetAllUsersAsync(CancellationToken cancellationToken);
         Task UpdateAsync(User user, CancellationToken cancellationToken);
         Task SaveAsync(User user, CancellationToken cancellationToken);
     }

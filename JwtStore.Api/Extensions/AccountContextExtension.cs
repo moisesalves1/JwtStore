@@ -283,6 +283,31 @@ namespace JwtStore.Api.Extensions
 
             #endregion
 
+            #region GetAllUsers
+
+            app.MapGet("api/v1/users", async (
+                IRequestHandler<
+                    JwtStore.Core.Contexts.AccountContext.UseCases.GetUsers.Request,
+                    JwtStore.Core.Contexts.AccountContext.UseCases.GetUsers.Response> handler,
+                ClaimsPrincipal user) =>
+            {
+                var request = new JwtStore.Core.Contexts.AccountContext.UseCases.GetUsers.Request
+                { 
+                    JwtUserEmail = user?.Identity?.Name 
+                };
+                var result = await handler.Handle(request, new CancellationToken());
+                if (!result.IsSuccess)
+                    return Results.Json(result, statusCode: result.Status);
+
+                return Results.Ok(result);
+            }).RequireAuthorization("Admin").WithOpenApi(operation => new(operation)
+            {
+                Summary = "Get All Users",
+                Tags = new List<OpenApiTag> { new() { Name = "AccountContext" } }
+            });
+
+            #endregion
+
         }
     }
 }

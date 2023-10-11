@@ -13,6 +13,8 @@ namespace JwtStore.Infra.Contexts.AccountContext.UseCases
             => _context = context;
         public async Task<User?> GetUserByEmailAsync(string email, CancellationToken cancellationToken)
             => await _context.Users.Include(x=>x.Roles).FirstOrDefaultAsync(x => x.Email.Address == email, cancellationToken);
+        public async Task<List<User>?> GetAllUsersAsync(CancellationToken cancellationToken)
+            => await _context.Users.Include(x => x.Roles).ToListAsync(cancellationToken);
         public async Task<bool> AnyAsync(string email, CancellationToken cancellationToken)
             => await _context.Users.AsNoTracking().AnyAsync(x => x.Email.Address == email, cancellationToken: cancellationToken);
         public async Task UpdateAsync(User user, CancellationToken cancellationToken)
