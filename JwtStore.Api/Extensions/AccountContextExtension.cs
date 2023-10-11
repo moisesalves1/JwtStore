@@ -96,6 +96,36 @@ namespace JwtStore.Api.Extensions
 
             #endregion
 
+            #region ResetToken
+
+            app.MapGet("api/v1/reset-token", async (
+                IRequestHandler<
+                    JwtStore.Core.Contexts.AccountContext.UseCases.ResetToken.Request,
+                    JwtStore.Core.Contexts.AccountContext.UseCases.ResetToken.Response> handler,
+                ClaimsPrincipal user) =>
+            {
+                var request = new JwtStore.Core.Contexts.AccountContext.UseCases.ResetToken.Request
+                {
+                    JwtUserEmail = user?.Identity?.Name
+                };
+                var result = await handler.Handle(request, new CancellationToken());
+                if (!result.IsSuccess)
+                    return Results.Json(result, statusCode: result.Status);
+
+                if (result.Data is null)
+                    return Results.Json(result, statusCode: 500);
+
+                result.Data.Token = JwtExtension.ReGenerate(result.Data);
+                return Results.Ok(result);
+            }).RequireAuthorization("Usuario").WithOpenApi(operation => new(operation)
+            {
+                Summary = "Reset Token",
+                Tags = new List<OpenApiTag> { new() { Name = "AccountContext" } }
+            });
+
+            #endregion
+
+
             #region ResendVerificationCode
 
             app.MapPost("api/v1/resend-verification-code", async (
