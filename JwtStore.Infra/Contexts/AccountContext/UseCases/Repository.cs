@@ -31,5 +31,15 @@ namespace JwtStore.Infra.Contexts.AccountContext.UseCases
             await _context.Users.AddAsync(user, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
         }
+
+        public async Task<User?> GetUserByIdAsync(string id, CancellationToken cancellationToken)
+            => await _context.Users.Include(x => x.Roles).FirstOrDefaultAsync(x => x.Id.ToString() == id, cancellationToken);
+
+        public async Task DeleteUserAsync(User user, CancellationToken cancellationToken)
+        {
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync(cancellationToken);
+        }
+
     }
 }

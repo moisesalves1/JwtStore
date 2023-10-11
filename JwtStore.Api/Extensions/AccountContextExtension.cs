@@ -308,6 +308,32 @@ namespace JwtStore.Api.Extensions
 
             #endregion
 
+            #region Delete User
+
+            app.MapDelete("api/v1/users/{id}", async (
+                [FromRoute] string id,
+                IRequestHandler<
+                    JwtStore.Core.Contexts.AccountContext.UseCases.DeleteUser.Request,
+                    JwtStore.Core.Contexts.AccountContext.UseCases.DeleteUser.Response> handler,
+                ClaimsPrincipal user) =>
+            {
+                var request = new JwtStore.Core.Contexts.AccountContext.UseCases.DeleteUser.Request
+                {
+                    Id = id
+                };
+                var result = await handler.Handle(request, new CancellationToken());
+                if (!result.IsSuccess)
+                    return Results.Json(result, statusCode: result.Status);
+
+                return Results.Ok(result);
+            }).RequireAuthorization("Admin").WithOpenApi(operation => new(operation)
+            {
+                Summary = "Delete user by Id",
+                Tags = new List<OpenApiTag> { new() { Name = "AccountContext" } }
+            });
+
+            #endregion
+
         }
     }
 }
